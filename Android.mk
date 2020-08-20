@@ -8,7 +8,8 @@ LOCAL_PATH := $(call my-dir)
 # gps hal module
 include $(CLEAR_VARS)
 
-LOCAL_PRELINK_MODULE := false
+LOCAL_MODULE := gps.$(TARGET_BOARD_PLATFORM)
+LOCAL_PROPRIETARY_MODULE := true
 LOCAL_MODULE_RELATIVE_PATH := hw
 
 LOCAL_SHARED_LIBRARIES := \
@@ -18,13 +19,11 @@ LOCAL_SHARED_LIBRARIES := \
 	libsysutils           \
 	libhardware
 
-LOCAL_MODULE := gps.$(TARGET_BOARD_PLATFORM)
-LOCAL_MODULE_OWNER := kostya740
+LOCAL_PRELINK_MODULE := false
 LOCAL_MODULE_TAGS := optional
 
 LOCAL_CFLAGS += -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function
-
 LOCAL_SRC_FILES :=    \
-	gps.c
+	gps.1.c
 
 include $(BUILD_SHARED_LIBRARY)

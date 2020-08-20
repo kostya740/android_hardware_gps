@@ -959,6 +959,7 @@ gps_state_init( GpsState*  state, GpsCallbacks* callbacks )
         return;
     }
 
+    ALOGE("Setting gps tty to /dev/%s", prop);
     snprintf(device, sizeof(device), "/dev/%s",prop);
     do {
         state->fd = open( device, O_RDWR );
@@ -979,30 +980,30 @@ gps_state_init( GpsState*  state, GpsCallbacks* callbacks )
         ios.c_oflag &= (~ONLCR); /* Stop \n -> \r\n translation on output */
         ios.c_iflag &= (~(ICRNL | INLCR)); /* Stop \r -> \n & \n -> \r translation on input */
         ios.c_iflag |= (IGNCR | IXOFF);  /* Ignore \r & XON/XOFF on input */
-	// Set baud rate and other flags
-        property_get("ro.kernel.android.gpsttybaud",baud,"9600");
-	if (strcmp(baud, "4800") == 0) {
-            ALOGE("Setting gps baud rate to 4800");
-            ios.c_cflag = B4800 | CRTSCTS | CS8 | CLOCAL | CREAD;
-        } else if (strcmp(baud, "9600") == 0) {
-            ALOGE("Setting gps baud rate to 9600");
-            ios.c_cflag = B9600 | CRTSCTS | CS8 | CLOCAL | CREAD;
-        } else if (strcmp(baud, "19200") == 0) {
-            ALOGE("Setting gps baud rate to 19200");
-            ios.c_cflag = B19200 | CRTSCTS | CS8 | CLOCAL | CREAD;
-        } else if (strcmp(baud, "38400") == 0) {
-            ALOGE("Setting gps baud rate to 38400");
-            ios.c_cflag = B38400 | CRTSCTS | CS8 | CLOCAL | CREAD;
-        } else if (strcmp(baud, "57600") == 0) {
-            ALOGE("Setting gps baud rate to 57600");
-            ios.c_cflag = B57600 | CRTSCTS | CS8 | CLOCAL | CREAD;
-        } else if (strcmp(baud, "115200") == 0) {
-            ALOGE("Setting gps baud rate to 115200");
-            ios.c_cflag = B115200 | CRTSCTS | CS8 | CLOCAL | CREAD;
-        } else {
-            ALOGE("GPS baud rate unknown: '%s'", baud);
-            return;
-        }
+	    // Set baud rate and other flags
+        property_get("ro.kernel.android.gps.speed",baud,"9600");
+        if (strcmp(baud, "4800") == 0) {
+                ALOGE("Setting gps baud rate to 4800");
+                ios.c_cflag = B4800 | CRTSCTS | CS8 | CLOCAL | CREAD;
+            } else if (strcmp(baud, "9600") == 0) {
+                ALOGE("Setting gps baud rate to 9600");
+                ios.c_cflag = B9600 | CRTSCTS | CS8 | CLOCAL | CREAD;
+            } else if (strcmp(baud, "19200") == 0) {
+                ALOGE("Setting gps baud rate to 19200");
+                ios.c_cflag = B19200 | CRTSCTS | CS8 | CLOCAL | CREAD;
+            } else if (strcmp(baud, "38400") == 0) {
+                ALOGE("Setting gps baud rate to 38400");
+                ios.c_cflag = B38400 | CRTSCTS | CS8 | CLOCAL | CREAD;
+            } else if (strcmp(baud, "57600") == 0) {
+                ALOGE("Setting gps baud rate to 57600");
+                ios.c_cflag = B57600 | CRTSCTS | CS8 | CLOCAL | CREAD;
+            } else if (strcmp(baud, "115200") == 0) {
+                ALOGE("Setting gps baud rate to 115200");
+                ios.c_cflag = B115200 | CRTSCTS | CS8 | CLOCAL | CREAD;
+            } else {
+                ALOGE("GPS baud rate unknown: '%s'", baud);
+                return;
+            }
 
         tcsetattr( state->fd, TCSANOW, &ios );
     }
