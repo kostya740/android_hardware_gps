@@ -24,6 +24,6 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_CFLAGS += -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function
 LOCAL_SRC_FILES :=    \
-	gps.1.c
+	gps.c
 
 include $(BUILD_SHARED_LIBRARY)
